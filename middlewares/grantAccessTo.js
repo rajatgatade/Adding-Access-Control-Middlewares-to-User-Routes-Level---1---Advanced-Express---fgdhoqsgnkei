@@ -8,17 +8,19 @@
         "message": "Access Denied"
     }
 */
-
 function grantAccessTo(roles) {
     try {
-        /*
-        Write your middleware here.
-        Steps: 
-        - Define a middleware function that takes the request, response, and next function as parameters.
-        - Extract the 'role' from req.body.
-        - Check if the required 'role' is present in the array.
-        - Return a valid response if access cannot be granted.
-        */
+        return function (req, res, next) {
+            const { role } = req.body;
+            if (!roles.includes(role)) {
+                return res.status(403).json({
+                    status: "error",
+                    message: "Access Denied"
+                })
+            } else {
+                next();
+            }
+        }
     } catch (err) {
         return res.status(400).json({
             status: "error",
@@ -27,5 +29,4 @@ function grantAccessTo(roles) {
     }
 }
 
-// Export the middleware function as a module.
-module.exports = { /*...*/ };
+module.exports = { grantAccessTo };
